@@ -5,11 +5,25 @@ provider "azurerm" {
 data "azurerm_subscription" "current" {}
 
 
+
+data "azurerm_eventhub" "barevent" {
+  name                = "myeventhubankur"
+  resource_group_name = "sample-1"
+  namespace_name      = "eventnamespaceankur"
+}
+
+data "azurerm_eventhub_namespace_authorization_rule" "bareventauth" {
+  name                = "RootManageSharedAccessKey"
+  resource_group_name = "sample-1"
+  namespace_name      = "eventnamespaceankur"
+}
+
+
 resource "azurerm_monitor_diagnostic_setting" "diag-setting" {
-  name                           = "toEventHub"
+  name                           = var.name
   target_resource_id             = data.azurerm_subscription.current.id
-  eventhub_name                  = "subscriptionactivitylog"
-  eventhub_authorization_rule_id = "/subscriptions/f3d20c9f-3cb5-45df-b6a8-32f7f4e3d1b6/resourceGroups/sample-1/providers/Microsoft.EventHub/namespaces/eventnamespaceankur/authorizationRules/RootManageSharedAccessKey"
+  eventhub_name                  = data.azurerm_eventhub.barevent.name
+  eventhub_authorization_rule_id = data.azurerm_eventhub_namespace_authorization_rule.bareventauth.id
 
   log {
     category = "Administrative"
