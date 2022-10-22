@@ -7,15 +7,15 @@ data "azurerm_subscription" "current" {}
 
 
 data "azurerm_eventhub" "barevent" {
-  name                = "myeventhubankur"
-  resource_group_name = "sample-1"
-  namespace_name      = "eventnamespaceankur"
+  name                = var.eventhub_name
+  resource_group_name = var.resource_group_name
+  namespace_name      = var.event_namespace_name
 }
 
 data "azurerm_eventhub_namespace_authorization_rule" "bareventauth" {
-  name                = "RootManageSharedAccessKey"
-  resource_group_name = "sample-1"
-  namespace_name      = "eventnamespaceankur"
+  name                = var.eventhub_auth_name
+  resource_group_name = var.resource_group_name
+  namespace_name      = var.event_namespace_name
 }
 
 
